@@ -7,6 +7,7 @@ temporary/
 
 # specific files
 credentials.txt
+hpc.run.*
 *-subset/*-processed-09232017-10*
 *-subset/*-processed-10*
 *-merged/*-processed-09232017-10*

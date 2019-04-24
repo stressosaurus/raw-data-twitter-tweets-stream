@@ -17,24 +17,17 @@ import os
 import re
 
 stream = sys.argv[1]
-set = sys.argv[2]
-testing = sys.argv[3]
-set_type = sys.argv[4]
-set_list = sys.argv[5]
+set_type = sys.argv[2]
+set_list = sys.argv[3]
+testing = sys.argv[4]
 
 # list the tabulated datasets
-directory_1 = stream+'-'+set+'/'
+directory_1 = stream+'-subset/'
 if testing == '09232017-09242017':
-    if set == 'tabulated':
-        list_tweet = ['A-processed-09232017-09232017_'+set+'-tweet.csv.gz',
-                      'A-processed-09232017-09242017_'+set+'-tweet.csv.gz']
-        list_user = ['A-processed-09232017-09232017_'+set+'-user.csv.gz',
-                     'A-processed-09232017-09242017_'+set+'-user.csv.gz']
-    elif set == 'subset':
-        list_tweet = ['A-processed-09232017-09232017-'+set+'-'+set_type+'-'+set_list+'_tabulated-tweet.csv.gz',
-                      'A-processed-09232017-09242017-'+set+'-'+set_type+'-'+set_list+'_tabulated-tweet.csv.gz']
-        list_user = ['A-processed-09232017-09232017-'+set+'-'+set_type+'-'+set_list+'_tabulated-user.csv.gz',
-                     'A-processed-09232017-09242017-'+set+'-'+set_type+'-'+set_list+'_tabulated-user.csv.gz']
+    list_tweet = ['A-processed-09232017-09232017-subset-'+set_type+'-'+set_list+'_tabulated-tweet.csv.gz',
+                  'A-processed-09232017-09242017-subset-'+set_type+'-'+set_list+'_tabulated-tweet.csv.gz']
+    list_user = ['A-processed-09232017-09232017-subset-'+set_type+'-'+set_list+'_tabulated-user.csv.gz',
+                 'A-processed-09232017-09242017-subset-'+set_type+'-'+set_list+'_tabulated-user.csv.gz']
 else:
     list = os.listdir(directory_1)
     list_tweet = []
@@ -54,10 +47,7 @@ try:
 except FileExistsError:
 	pass
 
-if set == 'tabulated':
-    data_label_merge = stream+'-processed-'+testing
-elif set == 'subset':
-    data_label_merge = stream+'-processed-'+testing+'-'+set+'-'+set_type+'-'+set_list
+data_label_merge = stream+'-processed-'+testing+'-subset-'+set_type+'-'+set_list
 print('--------------------------------------------------')
 print('### mergeTweets.py '+data_label_merge+' ###')
 print()

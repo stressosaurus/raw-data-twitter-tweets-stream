@@ -17,10 +17,11 @@ import os
 import re
 
 stream = sys.argv[1]
-key_type = sys.argv[2]
-key_list = sys.argv[3]
+set_type = sys.argv[2]
+set_list = sys.argv[3]
 testing = sys.argv[4]
 mod = int(sys.argv[5])
+rk = sys.argv[6]
 
 # make directory for subset data
 directory_0 = stream+'-subset/'
@@ -36,99 +37,39 @@ tabulated_user = directory_1+'A-processed-'+testing+'_tabulated-user.csv.gz'
 
 # list subset keywords
 directory_2 = 'keywords-subset/'
-file = open(directory_2+'keywords-'+key_type+'-'+key_list+'.txt')
-keywords = []
-for f in file:
-    keywords.append(f.lower().replace('\n',''))
-file.close()
+related_keywords = np.load(directory_2+'keywords-'+set_type+'-'+set_list+'-related-keywords-'+rk+'.npy').item()
+h = related_keywords['h']
+um = related_keywords['um']
+ui = related_keywords['ui']
+us = related_keywords['us']
+pi = related_keywords['pi']
 
-# subset and merge tables
-data_label_subset = stream+'-processed-'+testing+'-subset-'+key_type+'-'+key_list
-print('--------------------------------------------------')
-print('### subsetTweets.py '+data_label_subset+' ###')
-print()
-
-if key_type == 'hashtag':
+if set_type == 'hashtag':
     field = 'HTGS'
-elif key_type == 'user-mention':
+elif set_type == 'user-mention':
     field = 'UMS'
 else:
     field = 'HTGS' # default field
 
-# list subset related keywords (hashtags and user_mentions/users)
-def indexer(table,j,keys):
-	FF = str(table[field][j]).lower().split(',')
-	HTGS = str(table['HTGS'][j]).lower().split(',')
-	UMS = str(table['UMS'][j]).lower().split(',')
-	UID = table['UID'][j]
-	USN = table['USN'][j]
-	PTID = table['PTID'][j]
-	if len(set(keys) & set(FF)) > 0:
-		return HTGS, UMS, UID, USN, PTID
-	else:
-		return None
-h = []
-um = []
-ui = []
-us = []
-pi = []
-tb_list = []
-tb_UID_list = []
-start_1 = time.time()
-print('Indexing '+tabulated_tweet+'...')
-tb = pd.read_csv(tabulated_tweet,compression='gzip',sep=',',index_col=0,header=0,dtype=str)
-tb_UID = pd.read_csv(tabulated_user,compression='gzip',sep=',',index_col=0,header=0,dtype=str)
-tb_list.append(tb)
-tb_UID_list.append(tb_UID)
-idks = np.array(tb[field].keys())
-for c, idk in enumerate(idks):
-	try:
-		FF = str(tb[field][idk]).lower().split(',')
-		HTGS = str(tb['HTGS'][idk]).lower().split(',')
-		UMS = str(tb['UMS'][idk]).lower().split(',')
-		UID = tb['UID'][idk]
-		USN = tb['USN'][idk]
-		PTID = tb['PTID'][idk]
-		if len(set(keywords) & set(FF)) > 0:
-			if HTGS[0] != '*':
-				h.extend(HTGS)
-			if UMS[0] != '*':
-				um.extend(UMS)
-			if UID != '*':
-				ui.append(UID)
-			if USN != '*':
-				us.append(USN)
-			if PTID != '*':
-				pi.append(PTID)
-		if c%mod == 0:
-			print('...iteration ('+str(round((c/len(idks))*100,2))+'%) \t '+str(c)+'/'+str(len(idks))+' (TID '+str(idk)+') S for Success!...')
-	except:
-		print('...iteration ('+str(round((c/len(idks))*100,2))+'%) \t '+str(c)+'/'+str(len(idks))+' (TID '+str(idk)+') F for Failure!...')
-end_1 = time.time()
-print('Finished indexing '+tabulated_tweet+'!')
-print('Computing time: '+str(round(end_1-start_1,2))+' seconds.')
+# subset and merge tables
+data_label_subset = stream+'-processed-'+testing+'-subset-'+set_type+'-'+set_list
+print('--------------------------------------------------')
+print('### subsetTweets.py '+data_label_subset+' ###')
 print()
 
-start_1 = time.time()
-print('Preparing related keywords...')
-h = np.unique(h)
-set_h = set(h)
-um = np.unique(um)
-set_um = set(um)
-ui = np.unique(ui)
-set_ui = set(ui)
-us = np.unique(us)
-set_us = set(us)
-pi = np.unique(pi)
-set_pi = set(pi)
-print('Computing time: '+str(round(end_1-start_1,2))+' seconds.')
-print()
+def common_elements(list_a,list_b):
+	result = False
+	for y in list_b:
+		if y in list_a:
+			result = True
+			return result
+	return result
 
-# Extract and merge subsets according to the related keywords
-tb_subset = []
-tb_UID_subset = []
+# Extract subsets according to the related keywords
 start_1 = time.time()
 print('Subsetting '+tabulated_tweet+'...')
+tb = pd.read_csv(tabulated_tweet,compression='gzip',sep=',',index_col=0,header=0,dtype=str)
+tb_UID = pd.read_csv(tabulated_user,compression='gzip',sep=',',index_col=0,header=0,dtype=str)
 tb_rows = []
 tb_UID_rows = []
 idks = np.array(tb[field].keys())
@@ -141,19 +82,19 @@ for c, idk in enumerate(idks):
 		UID = tb['UID'][idk]
 		USN = tb['USN'][idk]
 		PTID = tb['PTID'][idk]
-		if len(set_h & set(HTGS)) > 0:
+		if common_elements(h,HTGS) == True:
 			row[0] = idk
 			row_UID[0] = UID
-		if len(set_um & set(UMS)) > 0:
+		if common_elements(um,UMS) == True:
 			row[0] = idk
 			row_UID[0] = UID
-		if len(set_ui & set(UID)) > 0:
+		if common_elements(ui,UID) == True:
 			row[0] = idk
 			row_UID[0] = UID
-		if len(set_us & set(USN)) > 0:
+		if common_elements(us,USN) == True:
 			row[0] = idk
 			row_UID[0] = UID
-		if len(set_pi & set(PTID)) > 0:
+		if common_elements(pi,PTID) == True:
 			row[0] = idk
 			row_UID[0] = UID
 			try:

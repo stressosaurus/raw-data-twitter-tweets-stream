@@ -513,6 +513,7 @@ def stopWord_getIndex(strings,l):
 # bins the tweets by hour (UTC)
 def time_binner(T,by='hour'):
 	month_code = {'Jan':1,'Feb':2,'Mar':3,'Apr':4,'May':5,'Jun':6,'Jul':7,'Aug':8,'Sep':9,'Oct':10,'Nov':11,'Dec':12}
+	month_range = {1:[1,31],2:[1,28],3:[1,31],4:[1,30],5:[1,31],6:[1,30],7:[1,31],8:[1,31],9:[1,30],10:[1,31],11:[1,30],12:[1,31]}
 	# time stamps and tweet ids
 	TID_time = []
 	TID_list = []
@@ -558,13 +559,29 @@ def time_binner(T,by='hour'):
 	time_on_vect = pd.DataFrame(time_on_vect).sort_values(by=['Y','M','D','H','N','S','Z'])
 	Yu = np.unique(time_on_vect['Y'])
 	Mu = np.unique(time_on_vect['M'])
-	Du = np.unique(time_on_vect['D'])
+	Du = []
+	for m in Mu:
+		day_index = time_on_vect.index[time_on_vect['M'] == m].tolist()
+		days = time_on_vect['D'][day_index]
+		days_min = days.min()
+		days_max = days.max()
+		Du.append(np.array([days_min,days_max]))
 	Hu = np.unique(time_on_vect['H'])
 	Nu = np.unique(time_on_vect['N'])
+
 	bins_on = {}
 	for i in range(Yu.min(),Yu.max()+1):
-		for j in range(Mu.min(),Mu.max()+1):
-			for k in range(Du.min(),Du.max()+1):
+		for jj ,j in enumerate(range(Mu.min(),Mu.max()+1)):
+			if jj == 0:
+				minimum = Du[jj].min()
+				maximum = month_range[j][1]+1
+			elif jj == len(Du)-1:
+				minimum = month_range[j][0]
+				maximum = Du[jj].max()+1
+			else:
+				minimum = month_range[j][0]
+				maximum = month_range[j][1]+1
+			for k in range(minimum,maximum):
 				for l in range(0,24):
 					if by == 'minute':
 						for m in range(0,60):
