@@ -2,7 +2,7 @@
 
 # index tabulated tweets for subsetting
 ./indexTweets.py 'A' 'hashtag' 'a' '09232017-09242017' 100000 '09232017-09242017'
-#./indexTweets.py 'A' 'hashtags' 'a' '09232017-10192017' 100000 '09232017-10192017'
+#./indexTweets.py 'A' 'hashtag' 'a' '09232017-10192017' 100000 '09232017-10192017'
 
 # subset tabulated tweet files
 ./subsetTweets.py 'A' 'hashtag' 'a' '09232017-09232017' 100000 '09232017-09242017'
