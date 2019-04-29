@@ -40,8 +40,6 @@ directory_2 = 'keywords-subset/'
 related_keywords = np.load(directory_2+'keywords-'+set_type+'-'+set_list+'-related-keywords-'+rk+'.npy').item()
 h = related_keywords['h']
 um = related_keywords['um']
-ui = related_keywords['ui']
-us = related_keywords['us']
 pi = related_keywords['pi']
 
 if set_type == 'hashtag':
@@ -88,10 +86,7 @@ for c, idk in enumerate(idks):
 		if common_elements(um,UMS) == True:
 			row[0] = idk
 			row_UID[0] = UID
-		if common_elements(ui,UID) == True:
-			row[0] = idk
-			row_UID[0] = UID
-		if common_elements(us,USN) == True:
+		if common_elements(um,USN) == True:
 			row[0] = idk
 			row_UID[0] = UID
 		if common_elements(pi,PTID) == True:

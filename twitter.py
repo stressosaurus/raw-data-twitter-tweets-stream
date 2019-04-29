@@ -186,122 +186,186 @@ def tabler(i,table,table_UID,data,tweet_ids):
 	try:
 		parent_id = data['tweet']['tweet_id']['reply-reverse'][i]
 		table[i].append(str(parent_id))
-		del parent_id
 	except:
 		table[i].append(missing_data_char)
 	# UID
-	try:
+	if code[2] != 1:
 		user_id = data['tweet']['user_id']['parent'][i]
 		table[i].append(str(user_id))
 		try:
 			tester_UID = table_UID[user_id]
 		except:
 			table_UID[user_id] = [missing_data_char]*3
-		del user_id
-	except:
-		try:
-			parent_id = data['tweet']['tweet_id']['reply-reverse'][i]
-			index = data['tweet']['tweet_id']['reply'][parent_id].index(i)
-			user_id = data['tweet']['user_id']['reply'][parent_id][index]
+	else:
+		if code[0] == 1:
+			user_id = data['tweet']['user_id']['parent'][i]
 			table[i].append(str(user_id))
 			try:
 				tester_UID = table_UID[user_id]
 			except:
 				table_UID[user_id] = [missing_data_char]*3
-			del parent_id, index, user_id
-		except:
-			table[i].append(missing_data_char)
+		else:
+			try:
+				parent_id = data['tweet']['tweet_id']['reply-reverse'][i]
+				index = data['tweet']['tweet_id']['reply'][parent_id].index(i)
+				user_id = data['tweet']['user_id']['reply'][parent_id][index]
+				table[i].append(str(user_id))
+				try:
+					tester_UID = table_UID[user_id]
+				except:
+					table_UID[user_id] = [missing_data_char]*3
+			except:
+				table[i].append(missing_data_char)
 	# USN
-	try:
+	if code[2] != 1:
 		user_id = data['tweet']['user_id']['parent'][i]
-		screen_name = data['user']['screen_name'][user_id]
-		table[i].append(str(screen_name))
-		table_UID[user_id][0] = screen_name
-		del user_id, screen_name
-	except:
 		try:
-			parent_id = data['tweet']['tweet_id']['reply-reverse'][i]
-			index = data['tweet']['tweet_id']['reply'][parent_id].index(i)
-			user_id = data['tweet']['user_id']['reply'][parent_id][index]
 			screen_name = data['user']['screen_name'][user_id]
 			table[i].append(str(screen_name))
 			table_UID[user_id][0] = screen_name
-			del parent_id, index, user_id, screen_name
 		except:
 			table[i].append(missing_data_char)
+	else:
+		if code[0] == 1:
+			user_id = data['tweet']['user_id']['parent'][i]
+			try:
+				screen_name = data['user']['screen_name'][user_id]
+				table[i].append(str(screen_name))
+				table_UID[user_id][0] = screen_name
+			except:
+				table[i].append(missing_data_char)
+		else:
+			try:
+				parent_id = data['tweet']['tweet_id']['reply-reverse'][i]
+				index = data['tweet']['tweet_id']['reply'][parent_id].index(i)
+				user_id = data['tweet']['user_id']['reply'][parent_id][index]
+				try:
+					screen_name = data['user']['screen_name'][user_id]
+					table[i].append(str(screen_name))
+					table_UID[user_id][0] = screen_name
+				except:
+					table[i].append(missing_data_char)
+			except:
+				table[i].append(missing_data_char)
 	# TM
-	try:
+	if code[2] != 1:
 		times = data['tweet']['time']['parent'][i]
 		if times == [] or times == None:
 			table[i].append(missing_data_char)
 		else:
 			table[i].append(str(times))
-		del times
-	except:
-		try:
-			parent_id = data['tweet']['tweet_id']['reply-reverse'][i]
-			index = data['tweet']['tweet_id']['reply'][parent_id].index(i)
-			times = data['tweet']['time']['reply'][parent_id][index]
+	else:
+		if code[0] == 1:
+			times = data['tweet']['time']['parent'][i]
 			if times == [] or times == None:
 				table[i].append(missing_data_char)
 			else:
 				table[i].append(str(times))
-			del parent_id, index, times
-		except:
-			table[i].append(missing_data_char)
+		else:
+			try:
+				parent_id = data['tweet']['tweet_id']['reply-reverse'][i]
+				index = data['tweet']['tweet_id']['reply'][parent_id].index(i)
+				times = data['tweet']['time']['reply'][parent_id][index]
+				if times == [] or times == None:
+					table[i].append(missing_data_char)
+				else:
+					table[i].append(str(times))
+			except:
+				table[i].append(missing_data_char)
 	# RPC, FVC, RTC
-	try:
+	if code[2] != 1:
 		rfr = data['tweet']['rfr_count']['parent'][i]
-		table[i].append(str(rfr[0]))
-		table[i].append(str(rfr[1]))
-		table[i].append(str(rfr[2]))
-		del rfr
-	except: # if tweet is a reply
-		try:
-			parent_id = data['tweet']['tweet_id']['reply-reverse'][i]
-			index = data['tweet']['tweet_id']['reply'][parent_id].index(i)
-			rfr = data['tweet']['rfr_count']['reply'][parent_id][index]
+		if rfr == [] or rfr == None:
+			table[i].append(missing_data_char)
+			table[i].append(missing_data_char)
+			table[i].append(missing_data_char)
+		else:
 			table[i].append(str(rfr[0]))
 			table[i].append(str(rfr[1]))
 			table[i].append(str(rfr[2]))
-			del parent_id, index, rfr
-		except:
-			table[i].append(missing_data_char)
-			table[i].append(missing_data_char)
-			table[i].append(missing_data_char)
+	else:
+		if code[0] == 1:
+			rfr = data['tweet']['rfr_count']['parent'][i]
+			if rfr == [] or rfr == None:
+				table[i].append(missing_data_char)
+				table[i].append(missing_data_char)
+				table[i].append(missing_data_char)
+			else:
+				table[i].append(str(rfr[0]))
+				table[i].append(str(rfr[1]))
+				table[i].append(str(rfr[2]))
+		else:
+			try:
+				parent_id = data['tweet']['tweet_id']['reply-reverse'][i]
+				index = data['tweet']['tweet_id']['reply'][parent_id].index(i)
+				rfr = data['tweet']['rfr_count']['reply'][parent_id][index]
+				if rfr == [] or rfr == None:
+					table[i].append(missing_data_char)
+					table[i].append(missing_data_char)
+					table[i].append(missing_data_char)
+				else:
+					table[i].append(str(rfr[0]))
+					table[i].append(str(rfr[1]))
+					table[i].append(str(rfr[2]))
+			except:
+				table[i].append(missing_data_char)
+				table[i].append(missing_data_char)
+				table[i].append(missing_data_char)
 	# L
-	try:
+	if code[2] != 1:
 		l = data['tweet']['language']['parent'][i]
 		if l != []:
 			table[i].append(l)
 		else:
 			table[i].append(missing_data_char)
-		del l
-	except:
-		try:
-			parent_id = data['tweet']['tweet_id']['reply-reverse'][i]
-			index = data['tweet']['tweet_id']['reply'][parent_id].index(i)
-			l = data['tweet']['language']['reply'][parent_id][index]
+	else:
+		if code[0] == 1:
+			l = data['tweet']['language']['parent'][i]
 			if l != []:
 				table[i].append(l)
 			else:
 				table[i].append(missing_data_char)
-			del parent_id, index, l
-		except:
-			table[i].append(missing_data_char)
+		else:
+			try:
+				parent_id = data['tweet']['tweet_id']['reply-reverse'][i]
+				index = data['tweet']['tweet_id']['reply'][parent_id].index(i)
+				l = data['tweet']['language']['reply'][parent_id][index]
+				if l != []:
+					table[i].append(l)
+				else:
+					table[i].append(missing_data_char)
+			except:
+				table[i].append(missing_data_char)
 	# TXT
-	try:
-		table[i].append(re.sub(r'[\t\n\s]+',' ',data['tweet']['text']['parent'][i]))
-	except:
-		try:
-			parent_id = data['tweet']['tweet_id']['reply-reverse'][i]
-			index = data['tweet']['tweet_id']['reply'][parent_id].index(i)
-			table[i].append(re.sub(r'[\t\n\s]+',' ',data['tweet']['text']['reply'][parent_id][index]))
-			del parent_id, index
-		except:
+	if code[2] != 1:
+		text = data['tweet']['text']['parent'][i]
+		if text == [] or text == None:
 			table[i].append(missing_data_char)
+		else:
+			table[i].append(re.sub(r'[\t\n\s]+',' ',text))
+		del text
+	else:
+		if code[0] == 1:
+			text = data['tweet']['text']['parent'][i]
+			if text == [] or text == None:
+				table[i].append(missing_data_char)
+			else:
+				table[i].append(re.sub(r'[\t\n\s]+',' ',text))
+			del text
+		else:
+			try:
+				parent_id = data['tweet']['tweet_id']['reply-reverse'][i]
+				index = data['tweet']['tweet_id']['reply'][parent_id].index(i)
+				text = data['tweet']['text']['reply'][parent_id][index]
+				if text == [] or text == None:
+					table[i].append(missing_data_char)
+				else:
+					table[i].append(re.sub(r'[\t\n\s]+',' ',text))
+				del parent_id, index
+			except:
+				table[i].append(missing_data_char)
 	# HTGS
-	try:
+	if code[2] != 1:
 		hashtags = data['tweet']['hashtags']['parent'][i]
 		if hashtags == [] or hashtags == None:
 			table[i].append(missing_data_char)
@@ -309,23 +373,30 @@ def tabler(i,table,table_UID,data,tweet_ids):
 			table[i].append(missing_data_char)
 		else:
 			table[i].append(','.join(hashtags))
-		del hashtags
-	except:
-		try:
-			parent_id = data['tweet']['tweet_id']['reply-reverse'][i]
-			index = data['tweet']['tweet_id']['reply'][parent_id].index(i)
-			hashtags = data['tweet']['hashtags']['reply'][parent_id][index]
+	else:
+		if code[0] == 1:
+			hashtags = data['tweet']['hashtags']['parent'][i]
 			if hashtags == [] or hashtags == None:
 				table[i].append(missing_data_char)
 			elif ','.join(hashtags) == 'null' or ','.join(hashtags) == 'nan':
 				table[i].append(missing_data_char)
 			else:
 				table[i].append(','.join(hashtags))
-			del parent_id, index, hashtags
-		except:
-			table[i].append(missing_data_char)
+		else:
+			try:
+				parent_id = data['tweet']['tweet_id']['reply-reverse'][i]
+				index = data['tweet']['tweet_id']['reply'][parent_id].index(i)
+				hashtags = data['tweet']['hashtags']['reply'][parent_id][index]
+				if hashtags == [] or hashtags == None:
+					table[i].append(missing_data_char)
+				elif ','.join(hashtags) == 'null' or ','.join(hashtags) == 'nan':
+					table[i].append(missing_data_char)
+				else:
+					table[i].append(','.join(hashtags))
+			except:
+				table[i].append(missing_data_char)
 	# UMS
-	try:
+	if code[2] != 1:
 		user_mentions = data['tweet']['user_mentions']['parent'][i]
 		if user_mentions == [] or user_mentions == None:
 			table[i].append(missing_data_char)
@@ -333,22 +404,29 @@ def tabler(i,table,table_UID,data,tweet_ids):
 			table[i].append(missing_data_char)
 		else:
 			table[i].append(','.join(user_mentions))
-		del user_mentions
-	except:
-		try:
-			parent_id = data['tweet']['tweet_id']['reply-reverse'][i]
-			index = data['tweet']['tweet_id']['reply'][parent_id].index(i)
-			user_id = data['tweet']['user_id']['reply'][parent_id][index]
-			user_mentions = data['tweet']['user_mentions']['reply'][parent_id][index]
+	else:
+		if code[0] == 1:
+			user_mentions = data['tweet']['user_mentions']['parent'][i]
 			if user_mentions == [] or user_mentions == None:
 				table[i].append(missing_data_char)
 			elif ','.join(user_mentions) == 'null' or ','.join(user_mentions) == 'nan':
 				table[i].append(missing_data_char)
 			else:
 				table[i].append(','.join(user_mentions))
-			del parent_id, index, user_id, user_mentions
-		except:
-			table[i].append(missing_data_char)
+		else:
+			try:
+				parent_id = data['tweet']['tweet_id']['reply-reverse'][i]
+				index = data['tweet']['tweet_id']['reply'][parent_id].index(i)
+				user_id = data['tweet']['user_id']['reply'][parent_id][index]
+				user_mentions = data['tweet']['user_mentions']['reply'][parent_id][index]
+				if user_mentions == [] or user_mentions == None:
+					table[i].append(missing_data_char)
+				elif ','.join(user_mentions) == 'null' or ','.join(user_mentions) == 'nan':
+					table[i].append(missing_data_char)
+				else:
+					table[i].append(','.join(user_mentions))
+			except:
+				table[i].append(missing_data_char)
 	# TMRT
 	try:
 		times = data['tweet']['time']['retweet'][i]
@@ -356,7 +434,6 @@ def tabler(i,table,table_UID,data,tweet_ids):
 			table[i].append(missing_data_char)
 		else:
 			table[i].append(str(','.join(times)))
-		del times
 	except:
 		table[i].append(missing_data_char)
 	# RPCRT, FVCRT, RTCRT
@@ -372,7 +449,6 @@ def tabler(i,table,table_UID,data,tweet_ids):
 		table[i].append(str(','.join(rfr_0)))
 		table[i].append(str(','.join(rfr_1)))
 		table[i].append(str(','.join(rfr_2)))
-		del rfr_vect, rfr_0, rfr_1, rfr_2
 	except:
 		table[i].append(missing_data_char)
 		table[i].append(missing_data_char)
@@ -386,7 +462,6 @@ def tabler(i,table,table_UID,data,tweet_ids):
 				tester_UID = table_UID[uidrt]
 			except:
 				table_UID[uidrt] = [missing_data_char]*3
-		del user_id_rt
 	except:
 		table[i].append(missing_data_char)
 	# USNRT
@@ -398,33 +473,45 @@ def tabler(i,table,table_UID,data,tweet_ids):
 				screen_name = data['user']['screen_name'][uidrt]
 				screen_name_rt.append(screen_name)
 				table_UID[uidrt][0] = screen_name
-				del screen_name
 			except:
 				screen_name_rt.append(missing_data_char)
 		table[i].append(str(','.join(screen_name_rt)))
-		del user_id_rt, screen_name_rt
 	except:
 		table[i].append(missing_data_char)
 	# UT and UNFL
-	try:
+	if code[2] != 1:
 		user_id = data['tweet']['user_id']['parent'][i]
-		user_time_created = data['user']['created_at'][user_id]
-		flc = data['user']['followers_count'][user_id]
-		table_UID[user_id][1] = user_time_created
-		table_UID[user_id][2] = str(','.join([str(k) for k in flc]))
-		del user_id, user_time_created, flc
-	except:
 		try:
-			parent_id = data['tweet']['tweet_id']['reply-reverse'][i]
-			index = data['tweet']['tweet_id']['reply'][parent_id].index(i)
-			user_id = data['tweet']['user_id']['reply'][parent_id][index]
 			user_time_created = data['user']['created_at'][user_id]
 			flc = data['user']['followers_count'][user_id]
 			table_UID[user_id][1] = user_time_created
 			table_UID[user_id][2] = str(','.join([str(k) for k in flc]))
-			del parent_id, index, user_id, user_time_created, flc
 		except:
 			pass
+	else:
+		if code[0] == 1:
+			user_id = data['tweet']['user_id']['parent'][i]
+			try:
+				user_time_created = data['user']['created_at'][user_id]
+				flc = data['user']['followers_count'][user_id]
+				table_UID[user_id][1] = user_time_created
+				table_UID[user_id][2] = str(','.join([str(k) for k in flc]))
+			except:
+				pass
+		else:
+			try:
+				parent_id = data['tweet']['tweet_id']['reply-reverse'][i]
+				index = data['tweet']['tweet_id']['reply'][parent_id].index(i)
+				user_id = data['tweet']['user_id']['reply'][parent_id][index]
+				try:
+					user_time_created = data['user']['created_at'][user_id]
+					flc = data['user']['followers_count'][user_id]
+					table_UID[user_id][1] = user_time_created
+					table_UID[user_id][2] = str(','.join([str(k) for k in flc]))
+				except:
+					pass
+			except:
+				pass
 	# UTRT and UNFLTRT
 	try:
 		user_id_rt = data['tweet']['user_id']['retweet'][i]
@@ -437,7 +524,6 @@ def tabler(i,table,table_UID,data,tweet_ids):
 				del user_time_created
 			except:
 				pass
-		del user_id_rt
 	except:
 		pass
 
@@ -582,12 +668,15 @@ def time_binner(T,by='hour'):
 				minimum = month_range[j][0]
 				maximum = month_range[j][1]+1
 			for k in range(minimum,maximum):
-				for l in range(0,24):
-					if by == 'minute':
-						for m in range(0,60):
-								bins_on[i,j,k,l,m] = []
-					elif by == 'hour':
-						bins_on[i,j,k,l,0] = []
+				if by == 'day':
+					bins_on[i,j,k] = []
+				elif by == 'hour':
+					for l in range(0,24):
+						if by == 'hour':
+							bins_on[i,j,k,l] = []
+						elif by == 'minute':
+							for m in range(0,60):
+									bins_on[i,j,k,l,m] = []
 
 	# populate bins
 	for i, j in enumerate(TID_time):
@@ -607,9 +696,14 @@ def time_binner(T,by='hour'):
 			elif k == 4:
 				time_zone = int(t.replace('+',''))
 				tid = TID_list[i]
-		if by == 'hour':
+		if by == 'day':
 			try:
-				bins_on[year,month,day,hour,0].append(tid)
+				bins_on[year,month,day].append(tid)
+			except:
+				pass
+		elif by == 'hour':
+			try:
+				bins_on[year,month,day,hour].append(tid)
 			except:
 				pass
 		elif by == 'minute':
@@ -617,6 +711,39 @@ def time_binner(T,by='hour'):
 				bins_on[year,month,day,hour,minute].append(tid)
 			except:
 				pass
+
+	# time labels
+	time_labels_main = []
+	for t in bins_on.keys():
+	    m = str(t[1])
+	    if len(m) == 1:
+	        m = '0'+m
+	    d = str(t[2])
+	    if len(d) == 1:
+	        d = '0'+d
+	    h = str(t[3])
+	    if len(h) == 1:
+	        h = '0'+h
+	    time_labels_main.append(m+'/'+d+' '+h+':00')
+	hour_labels = (time_labels_main,range(0,len(time_labels_main)))
+	day_labels_main = []
+	for t in bins_on.keys():
+	    m = str(t[1])
+	    if len(m) == 1:
+	        m = '0'+m
+	    d = str(t[2])
+	    if len(d) == 1:
+	        d = '0'+d
+	    h = str(t[3])
+	    if len(h) == 1:
+	        h = '0'+h
+	    day_labels_main.append(m+'/'+d)
+	day_labels_main = list(np.unique(day_labels_main))
+	day_labels_position = []
+	for i in range(0,len(time_labels_main)+1):
+	    if i%24 == 0:
+	        day_labels_position.append(i+12)
+	day_labels = (day_labels_main,day_labels_position)
 
 	# count bin populations
 	bins_on_count = {}
@@ -626,4 +753,5 @@ def time_binner(T,by='hour'):
 			bins_on_count[i] = length
 		else:
 			bins_on_count[i] = None
-	return bins_on, bins_on_count
+
+	return bins_on, bins_on_count, hour_labels, day_labels

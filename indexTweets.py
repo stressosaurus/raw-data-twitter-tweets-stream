@@ -73,8 +73,6 @@ def common_elements(list_a,list_b):
 	return result
 h = []
 um = []
-ui = []
-us = []
 pi = []
 for k, i in enumerate(list_tweet):
     start_1 = time.time()
@@ -87,18 +85,12 @@ for k, i in enumerate(list_tweet):
     		FF = str(tb[field][idk]).lower().split(',')
     		HTGS = str(tb['HTGS'][idk]).lower().split(',')
     		UMS = str(tb['UMS'][idk]).lower().split(',')
-    		UID = tb['UID'][idk]
-    		USN = tb['USN'][idk]
     		PTID = tb['PTID'][idk]
     		if common_elements(keywords,FF) == True:
     			if HTGS[0] != '*':
     				h.extend(HTGS)
     			if UMS[0] != '*':
     				um.extend(UMS)
-    			if UID != '*':
-    				ui.append(UID)
-    			if USN != '*':
-    				us.append(USN)
     			if PTID != '*':
     				pi.append(PTID)
     		if c%mod == 0:
@@ -114,8 +106,6 @@ start_1 = time.time()
 print('Preparing related keywords...')
 h = np.unique(h)
 um = np.unique(um)
-ui = np.unique(ui)
-us = np.unique(us)
 pi = np.unique(pi)
 end_1 = time.time()
 print('Computing time: '+str(round(end_1-start_1,2))+' seconds.')
@@ -126,8 +116,6 @@ print('Saving related keywords...')
 related_keywords = {}
 related_keywords['h'] = h
 related_keywords['um'] = um
-related_keywords['ui'] = ui
-related_keywords['us'] = us
 related_keywords['pi'] = pi
 np.save(directory_2+'keywords-'+set_type+'-'+set_list+'-related-keywords-'+rk+'.npy',related_keywords)
 del related_keywords
