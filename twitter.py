@@ -672,11 +672,7 @@ def time_binner(T,by='hour'):
 					bins_on[i,j,k] = []
 				elif by == 'hour':
 					for l in range(0,24):
-						if by == 'hour':
-							bins_on[i,j,k,l] = []
-						elif by == 'minute':
-							for m in range(0,60):
-									bins_on[i,j,k,l,m] = []
+						bins_on[i,j,k,l] = []
 
 	# populate bins
 	for i, j in enumerate(TID_time):
@@ -706,25 +702,23 @@ def time_binner(T,by='hour'):
 				bins_on[year,month,day,hour].append(tid)
 			except:
 				pass
-		elif by == 'minute':
-			try:
-				bins_on[year,month,day,hour,minute].append(tid)
-			except:
-				pass
 
 	# time labels
 	time_labels_main = []
 	for t in bins_on.keys():
-	    m = str(t[1])
-	    if len(m) == 1:
-	        m = '0'+m
-	    d = str(t[2])
-	    if len(d) == 1:
-	        d = '0'+d
-	    h = str(t[3])
-	    if len(h) == 1:
-	        h = '0'+h
-	    time_labels_main.append(m+'/'+d+' '+h+':00')
+		m = str(t[1])
+		if len(m) == 1:
+			m = '0'+m
+		if by == 'day' or by == 'hour':
+			d = str(t[2])
+			if len(d) == 1:
+				d = '0'+d
+			time_labels_main.append(m+'/'+d)
+		elif by == 'hour':
+			h = str(t[3])
+			if len(h) == 1:
+				h = '0'+h
+			time_labels_main.append(m+'/'+d+' '+h+':00')
 	hour_labels = (time_labels_main,range(0,len(time_labels_main)))
 	day_labels_main = []
 	for t in bins_on.keys():
@@ -734,9 +728,6 @@ def time_binner(T,by='hour'):
 	    d = str(t[2])
 	    if len(d) == 1:
 	        d = '0'+d
-	    h = str(t[3])
-	    if len(h) == 1:
-	        h = '0'+h
 	    day_labels_main.append(m+'/'+d)
 	day_labels_main = list(np.unique(day_labels_main))
 	day_labels_position = []
