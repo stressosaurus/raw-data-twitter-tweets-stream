@@ -621,6 +621,8 @@ def time_binner(T,by='hour'):
 		if T['NRT'][i] == 1 or T['NRT'][i] == '1':
 			time = T['TM'][i]
 			if time != '*':
+				TID_time.append(time)
+				TID_list.append(i)
 				TID_time_on.append(time)
 
     # streamer-on bins
@@ -677,6 +679,7 @@ def time_binner(T,by='hour'):
 	# populate bins
 	for i, j in enumerate(TID_time):
 		time = j.split(' ')
+		tid = TID_list[i]
 		for k, t in enumerate(time):
 			if k == 0:
 				month = month_code[t]
@@ -691,7 +694,6 @@ def time_binner(T,by='hour'):
 				second = int(clock[2])
 			elif k == 4:
 				time_zone = int(t.replace('+',''))
-				tid = TID_list[i]
 		if by == 'day':
 			try:
 				bins_on[year,month,day].append(tid)
