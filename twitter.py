@@ -605,6 +605,7 @@ def time_binner(T,by='hour'):
 	TID_list = []
 	TID_time_on = []
 	for i in list(T['RTT'].keys()):
+		# if its a retweet
 		if T['RTT'][i] == 1 or T['RTT'][i] == '1':
 			time = T['TM'][i]
 			if time != '*':
@@ -618,12 +619,19 @@ def time_binner(T,by='hour'):
 						TID_time.append(timeRT[j])
 						TID_list.append(i)
 						TID_time_on.append(timeRT[j])
-		if T['NRT'][i] == 1 or T['NRT'][i] == '1':
+		# if its a normal tweet
+		elif T['NRT'][i] == 1 or T['NRT'][i] == '1':
 			time = T['TM'][i]
 			if time != '*':
 				TID_time.append(time)
 				TID_list.append(i)
 				TID_time_on.append(time)
+		# if replied or a reply tweet
+		else:
+			time = T['TM'][i]
+			if time != '*':
+				TID_time.append(time)
+				TID_list.append(i)
 
     # streamer-on bins
 	split_time_stamps = [np.array(i.split(' ')) for i in TID_time_on]
