@@ -668,15 +668,19 @@ def time_binner(T,by='hour'):
 	bins_on = {}
 	for i in range(Yu.min(),Yu.max()+1):
 		for jj ,j in enumerate(range(Mu.min(),Mu.max()+1)):
-			if jj == 0:
-				minimum = Du[jj].min()
-				maximum = month_range[j][1]+1
-			elif jj == len(Du)-1:
-				minimum = month_range[j][0]
-				maximum = Du[jj].max()+1
+			if len(Du) == 1:
+				minimum = Du[0].min()
+				maximum = Du[0].max()+1
 			else:
-				minimum = month_range[j][0]
-				maximum = month_range[j][1]+1
+				if jj == 0:
+					minimum = Du[jj].min()
+					maximum = month_range[j][1]+1
+				elif jj == len(Du)-1:
+					minimum = month_range[j][0]
+					maximum = Du[jj].max()+1
+				else:
+					minimum = month_range[j][0]
+					maximum = month_range[j][1]+1
 			for k in range(minimum,maximum):
 				if by == 'day':
 					bins_on[i,j,k] = []
