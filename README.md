@@ -28,7 +28,7 @@
 
 **Twitter Application User Interface (API).** You must have keys and tokens of your Twitter API to use the streamer (see INSTRUCTIONS).
 
-**Instructions - Website.** https://stressosaurus.github.io/raw-data-twitter-tweets/
+**Instructions - Website.** https://stressosaurus.github.io/raw-data-twitter-tweets-stream/
 
 **Getting Started - Jupyter Notebook.** Clone this repository and run the following command on the terminal with the correct working directory.
 
