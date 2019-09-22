@@ -151,7 +151,7 @@ def tabler(i,table,table_UID,data,tweet_ids):
 	#   5.  NRT    - Normal Tweets (1-True or 0-False)
 	#   6.  PTID   - Parent Tweet ID (replies only)
 	#   7.	UID    - User ID
-	#   8.	USN    - User screen name
+	#   8.	USN    - User screen name [OMITTED]
 	#   9.	TM     - Time created
 	#   10.	RPC    - Replied Counts
 	#   11. FVC    - Favorited Counts
@@ -159,17 +159,17 @@ def tabler(i,table,table_UID,data,tweet_ids):
 	#   13.	L      - language
 	#   14.	TXT    - Tweet Text
 	#   15.	HTGS   - Hashtags (sep=',')
-	#   16.	UMS    - user mentions (sep=',')
+	#   16.	UMS    - user mentions (sep=',') [OMITTED]
 	#   17.	TMRT   - Time if retweeted (sep=',')
 	#   18.	RPCRT  - Replied Counts if retweeted (sep=',')
 	#   19.	FVCRT  - Favorited Counts if retweeted (sep=',')
 	#   20.	RTCRT  - Retweeted Counts if retweeted (sep=',')
 	#	21.	UIDRT  - User ID if retweeted (sep=',')
-	#	22.	USNRT  - User screen name if retweeted (sep=',')
+	#	22.	USNRT  - User screen name if retweeted (sep=',') [OMITTED]
 
 	# table_UID columns
-	#	1. UID  - User screen screen_name
-	#	2. USN  - User screen screen_name
+	#	1. UID  - User ID
+	#	2. USN  - User screen name [OMITTED]
 	#	3. UT   - Time user created
 	#	4. UNFL - User number of followers (sep=',')
 
@@ -216,37 +216,37 @@ def tabler(i,table,table_UID,data,tweet_ids):
 					table_UID[user_id] = [missing_data_char]*3
 			except:
 				table[i].append(missing_data_char)
-	# USN
-	if code[2] != 1:
-		user_id = data['tweet']['user_id']['parent'][i]
-		try:
-			screen_name = data['user']['screen_name'][user_id]
-			table[i].append(str(screen_name))
-			table_UID[user_id][0] = screen_name
-		except:
-			table[i].append(missing_data_char)
-	else:
-		if code[0] == 1:
-			user_id = data['tweet']['user_id']['parent'][i]
-			try:
-				screen_name = data['user']['screen_name'][user_id]
-				table[i].append(str(screen_name))
-				table_UID[user_id][0] = screen_name
-			except:
-				table[i].append(missing_data_char)
-		else:
-			try:
-				parent_id = data['tweet']['tweet_id']['reply-reverse'][i]
-				index = data['tweet']['tweet_id']['reply'][parent_id].index(i)
-				user_id = data['tweet']['user_id']['reply'][parent_id][index]
-				try:
-					screen_name = data['user']['screen_name'][user_id]
-					table[i].append(str(screen_name))
-					table_UID[user_id][0] = screen_name
-				except:
-					table[i].append(missing_data_char)
-			except:
-				table[i].append(missing_data_char)
+#	# USN
+#	if code[2] != 1:
+#		user_id = data['tweet']['user_id']['parent'][i]
+#		try:
+#			screen_name = data['user']['screen_name'][user_id]
+#			table[i].append(str(screen_name))
+#			table_UID[user_id][0] = screen_name
+#		except:
+#			table[i].append(missing_data_char)
+#	else:
+#		if code[0] == 1:
+#			user_id = data['tweet']['user_id']['parent'][i]
+#			try:
+#				screen_name = data['user']['screen_name'][user_id]
+#				table[i].append(str(screen_name))
+#				table_UID[user_id][0] = screen_name
+#			except:
+#				table[i].append(missing_data_char)
+#		else:
+#			try:
+#				parent_id = data['tweet']['tweet_id']['reply-reverse'][i]
+#				index = data['tweet']['tweet_id']['reply'][parent_id].index(i)
+#				user_id = data['tweet']['user_id']['reply'][parent_id][index]
+#				try:
+#					screen_name = data['user']['screen_name'][user_id]
+#					table[i].append(str(screen_name))
+#					table_UID[user_id][0] = screen_name
+#				except:
+#					table[i].append(missing_data_char)
+#			except:
+#				table[i].append(missing_data_char)
 	# TM
 	if code[2] != 1:
 		times = data['tweet']['time']['parent'][i]
@@ -395,38 +395,38 @@ def tabler(i,table,table_UID,data,tweet_ids):
 					table[i].append(','.join(hashtags))
 			except:
 				table[i].append(missing_data_char)
-	# UMS
-	if code[2] != 1:
-		user_mentions = data['tweet']['user_mentions']['parent'][i]
-		if user_mentions == [] or user_mentions == None:
-			table[i].append(missing_data_char)
-		elif ','.join(user_mentions) == 'null' or ','.join(user_mentions) == 'nan':
-			table[i].append(missing_data_char)
-		else:
-			table[i].append(','.join(user_mentions))
-	else:
-		if code[0] == 1:
-			user_mentions = data['tweet']['user_mentions']['parent'][i]
-			if user_mentions == [] or user_mentions == None:
-				table[i].append(missing_data_char)
-			elif ','.join(user_mentions) == 'null' or ','.join(user_mentions) == 'nan':
-				table[i].append(missing_data_char)
-			else:
-				table[i].append(','.join(user_mentions))
-		else:
-			try:
-				parent_id = data['tweet']['tweet_id']['reply-reverse'][i]
-				index = data['tweet']['tweet_id']['reply'][parent_id].index(i)
-				user_id = data['tweet']['user_id']['reply'][parent_id][index]
-				user_mentions = data['tweet']['user_mentions']['reply'][parent_id][index]
-				if user_mentions == [] or user_mentions == None:
-					table[i].append(missing_data_char)
-				elif ','.join(user_mentions) == 'null' or ','.join(user_mentions) == 'nan':
-					table[i].append(missing_data_char)
-				else:
-					table[i].append(','.join(user_mentions))
-			except:
-				table[i].append(missing_data_char)
+#	# UMS
+#	if code[2] != 1:
+#		user_mentions = data['tweet']['user_mentions']['parent'][i]
+#		if user_mentions == [] or user_mentions == None:
+#			table[i].append(missing_data_char)
+#		elif ','.join(user_mentions) == 'null' or ','.join(user_mentions) == 'nan':
+#			table[i].append(missing_data_char)
+#		else:
+#			table[i].append(','.join(user_mentions))
+#	else:
+#		if code[0] == 1:
+#			user_mentions = data['tweet']['user_mentions']['parent'][i]
+#			if user_mentions == [] or user_mentions == None:
+#				table[i].append(missing_data_char)
+#			elif ','.join(user_mentions) == 'null' or ','.join(user_mentions) == 'nan':
+#				table[i].append(missing_data_char)
+#			else:
+#				table[i].append(','.join(user_mentions))
+#		else:
+#			try:
+#				parent_id = data['tweet']['tweet_id']['reply-reverse'][i]
+#				index = data['tweet']['tweet_id']['reply'][parent_id].index(i)
+#				user_id = data['tweet']['user_id']['reply'][parent_id][index]
+#				user_mentions = data['tweet']['user_mentions']['reply'][parent_id][index]
+#				if user_mentions == [] or user_mentions == None:
+#					table[i].append(missing_data_char)
+#				elif ','.join(user_mentions) == 'null' or ','.join(user_mentions) == 'nan':
+#					table[i].append(missing_data_char)
+#				else:
+#					table[i].append(','.join(user_mentions))
+#			except:
+#				table[i].append(missing_data_char)
 	# TMRT
 	try:
 		times = data['tweet']['time']['retweet'][i]
@@ -464,20 +464,20 @@ def tabler(i,table,table_UID,data,tweet_ids):
 				table_UID[uidrt] = [missing_data_char]*3
 	except:
 		table[i].append(missing_data_char)
-	# USNRT
-	try:
-		user_id_rt = data['tweet']['user_id']['retweet'][i]
-		screen_name_rt = []
-		for uidrt in user_id_rt:
-			try:
-				screen_name = data['user']['screen_name'][uidrt]
-				screen_name_rt.append(screen_name)
-				table_UID[uidrt][0] = screen_name
-			except:
-				screen_name_rt.append(missing_data_char)
-		table[i].append(str(','.join(screen_name_rt)))
-	except:
-		table[i].append(missing_data_char)
+#	# USNRT
+#	try:
+#		user_id_rt = data['tweet']['user_id']['retweet'][i]
+#		screen_name_rt = []
+#		for uidrt in user_id_rt:
+#			try:
+#				screen_name = data['user']['screen_name'][uidrt]
+#				screen_name_rt.append(screen_name)
+#				table_UID[uidrt][0] = screen_name
+#			except:
+#				screen_name_rt.append(missing_data_char)
+#		table[i].append(str(','.join(screen_name_rt)))
+#	except:
+#		table[i].append(missing_data_char)
 	# UT and UNFL
 	if code[2] != 1:
 		user_id = data['tweet']['user_id']['parent'][i]
@@ -538,22 +538,31 @@ def tabulate(data,tweet_ids):
 	# table
 	table = pd.DataFrame(table)
 	table = table.transpose()
+#	table.columns = ['RTT','RPT','TRP','NRT',
+#					 'PTID','UID','USN','TM',
+#					 'RPC','FVC','RTC','L',
+#					 'TXT','HTGS','UMS',
+#					 'TMRT','RPCRT','FVCRT','RTCRT',
+#					 'UIDRT','USNRT']
 	table.columns = ['RTT','RPT','TRP','NRT',
-					 'PTID','UID','USN','TM',
+					 'PTID','UID','TM',
 					 'RPC','FVC','RTC','L',
-					 'TXT','HTGS','UMS',
+					 'TXT','HTGS',
 					 'TMRT','RPCRT','FVCRT','RTCRT',
-					 'UIDRT','USNRT']
+					 'UIDRT']
 
 	# table UID
 	table_UID = pd.DataFrame(table_UID)
 	table_UID = table_UID.transpose()
-	table_UID.columns = ['USN','UT','UNFL']
+	table_UID = table_UID.drop(columns=[0])
+#	table_UID.columns = ['USN','UT','UNFL']
+	table_UID.columns = ['UT','UNFL']
 	drop_rows_UID = []
-	for k in list(table_UID['USN'].keys()):
+	for k in list(table_UID['UT'].keys()):
 		row_vect = table_UID.loc[k,:]
 		try:
-			if ''.join(list(row_vect.values)) == '***':
+			#if ''.join(list(row_vect.values)) == '***':
+			if ''.join(list(row_vect.values)) == '**':
 				drop_rows_UID.append(k)
 		except:
 			pass

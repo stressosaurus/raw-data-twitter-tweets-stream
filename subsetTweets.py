@@ -39,13 +39,13 @@ tabulated_user = directory_1+'A-processed-'+testing+'_tabulated-user.csv.gz'
 directory_2 = 'keywords-subset/'
 related_keywords = np.load(directory_2+'keywords-'+set_type+'-'+set_list+'-related-keywords-'+rk+'.npy').item()
 h = related_keywords['h']
-um = related_keywords['um']
+#um = related_keywords['um']
 pi = related_keywords['pi']
 
 if set_type == 'hashtag':
     field = 'HTGS'
-elif set_type == 'user-mention':
-    field = 'UMS'
+#elif set_type == 'user-mention':
+#    field = 'UMS'
 else:
     field = 'HTGS' # default field
 
@@ -76,19 +76,19 @@ for c, idk in enumerate(idks):
 		row = ['*']*2
 		row_UID = ['*']*2
 		HTGS = str(tb['HTGS'][idk]).lower().split(',')
-		UMS = str(tb['UMS'][idk]).lower().split(',')
+#		UMS = str(tb['UMS'][idk]).lower().split(',')
 		UID = tb['UID'][idk]
-		USN = tb['USN'][idk]
+#		USN = tb['USN'][idk]
 		PTID = tb['PTID'][idk]
 		if common_elements(h,HTGS) == True:
 			row[0] = idk
 			row_UID[0] = UID
-		if common_elements(um,UMS) == True:
-			row[0] = idk
-			row_UID[0] = UID
-		if common_elements(um,USN) == True:
-			row[0] = idk
-			row_UID[0] = UID
+#		if common_elements(um,UMS) == True:
+#			row[0] = idk
+#			row_UID[0] = UID
+#		if common_elements(um,USN) == True:
+#			row[0] = idk
+#			row_UID[0] = UID
 		if common_elements(pi,PTID) == True:
 			row[0] = idk
 			row_UID[0] = UID
