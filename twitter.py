@@ -42,7 +42,7 @@ def get_id_sets(data):
 
 def read(STDVID,date_range):
 	try:
-		directory = '/twitter-tweets/'+STDVID+'-processed/'
+		directory = '/twitter-tweets-stream/'+STDVID+'-processed/'
 		filename = 'keywordStream'+STDVID+'Tweets_'+date_range+'_processed.npy.tar.gz'
 		filename_tar = directory+filename
 		filename_tar_directory = os.path.abspath(os.path.join(os.getcwd(), os.pardir))+filename_tar
@@ -53,7 +53,7 @@ def read(STDVID,date_range):
 		file0_tar.close()
 	except FileNotFoundError:
 		try:
-			directory = '/raw-data/twitter-tweets/'+STDVID+'-processed/'
+			directory = '/raw-data/twitter-tweets-stream/'+STDVID+'-processed/'
 			filename = 'keywordStream'+STDVID+'Tweets_'+date_range+'_processed.npy.tar.gz'
 			filename_tar = directory+filename
 			filename_tar_directory = os.path.abspath(os.path.join(os.getcwd(), os.pardir))+filename_tar
@@ -99,13 +99,13 @@ def read_csv(stream,date_range,dtype=str,subset=False,which_set='subset',which_s
 			out_U = pd.read_csv(pathway_U,compression='gzip',sep=',',index_col=0,header=0,dtype=str)
 		except FileNotFoundError:
 			try:
-				directory_1 = '/raw-data/twitter-tweets/'+stream+'-tabulated/'
+				directory_1 = '/raw-data/twitter-tweets-stream/'+stream+'-tabulated/'
 				pathway_T = os.path.abspath(os.path.join(os.getcwd(), os.pardir))+directory_1+stream+'-processed-'+date_range+'_tabulated-tweet.csv.gz'
 				pathway_U = os.path.abspath(os.path.join(os.getcwd(), os.pardir))+directory_1+stream+'-processed-'+date_range+'_tabulated-user.csv.gz'
 				out_T = pd.read_csv(pathway_T,compression='gzip',sep=',',index_col=0,header=0,dtype=str)
 				out_U = pd.read_csv(pathway_U,compression='gzip',sep=',',index_col=0,header=0,dtype=str)
 			except FileNotFoundError:
-				directory_1 = '/twitter-tweets/'+stream+'-tabulated/'
+				directory_1 = '/twitter-tweets-stream/'+stream+'-tabulated/'
 				pathway_T = os.path.abspath(os.path.join(os.getcwd(), os.pardir))+directory_1+stream+'-processed-'+date_range+'_tabulated-tweet.csv.gz'
 				pathway_U = os.path.abspath(os.path.join(os.getcwd(), os.pardir))+directory_1+stream+'-processed-'+date_range+'_tabulated-user.csv.gz'
 				out_T = pd.read_csv(pathway_T,compression='gzip',sep=',',index_col=0,header=0,dtype=str)
@@ -119,13 +119,13 @@ def read_csv(stream,date_range,dtype=str,subset=False,which_set='subset',which_s
 			out_U = pd.read_csv(pathway_U,compression='gzip',sep=',',index_col=0,header=0,dtype=str)
 		except FileNotFoundError:
 			try:
-				directory_1 = '/raw-data/twitter-tweets/'+stream+'-'+which_set+'/'
+				directory_1 = '/raw-data/twitter-tweets-stream/'+stream+'-'+which_set+'/'
 				pathway_T = os.path.abspath(os.path.join(os.getcwd(), os.pardir))+directory_1+stream+'-processed-'+date_range+'-subset-'+which_set_params[0]+'-'+which_set_params[1]+'_tabulated-tweet.csv.gz'
 				pathway_U = os.path.abspath(os.path.join(os.getcwd(), os.pardir))+directory_1+stream+'-processed-'+date_range+'-subset-'+which_set_params[0]+'-'+which_set_params[1]+'_tabulated-user.csv.gz'
 				out_T = pd.read_csv(pathway_T,compression='gzip',sep=',',index_col=0,header=0,dtype=str)
 				out_U = pd.read_csv(pathway_U,compression='gzip',sep=',',index_col=0,header=0,dtype=str)
 			except FileNotFoundError:
-				directory_1 = '/twitter-tweets/'+stream+'-'+which_set+'/'
+				directory_1 = '/twitter-tweets-stream/'+stream+'-'+which_set+'/'
 				pathway_T = os.path.abspath(os.path.join(os.getcwd(), os.pardir))+directory_1+stream+'-processed-'+date_range+'-subset-'+which_set_params[0]+'-'+which_set_params[1]+'_tabulated-tweet.csv.gz'
 				pathway_U = os.path.abspath(os.path.join(os.getcwd(), os.pardir))+directory_1+stream+'-processed-'+date_range+'-subset-'+which_set_params[0]+'-'+which_set_params[1]+'_tabulated-user.csv.gz'
 				out_T = pd.read_csv(pathway_T,compression='gzip',sep=',',index_col=0,header=0,dtype=str)
