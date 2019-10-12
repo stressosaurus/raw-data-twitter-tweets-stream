@@ -83,18 +83,12 @@ for k, i in enumerate(list_tweet):
         tb_merged = tb_main.append(tb_will_add)
         tb_main = tb_merged
         # merge existing ids and add to main table
-#        columns_label = ['RTT','RPT','TRP','NRT',
-#    					 'PTID','UID','USN','TM',
-#    					 'RPC','FVC','RTC','L',
-#    					 'TXT','HTGS','UMS',
-#    					 'TMRT','RPCRT','FVCRT','RTCRT',
-#    					 'UIDRT','USNRT']
         columns_label = ['RTT','RPT','TRP','NRT',
-    					 'PTID','UID','TM',
+    					 'PTID','UID','USN','TM',
     					 'RPC','FVC','RTC','L',
-    					 'TXT','HTGS',
+    					 'TXT','HTGS','UMS',
     					 'TMRT','RPCRT','FVCRT','RTCRT',
-    					 'UIDRT']
+    					 'UIDRT','USNRT']
         for j in existing:
             for jj in columns_label:
                 if jj in ['TMRT','RPCRT','FVCRT','RTCRT','UIDRT']:
@@ -125,8 +119,7 @@ for k, i in enumerate(list_tweet):
         tb_UID_merged = tb_UID_main.append(tb_UID_will_add)
         tb_UID_main = tb_UID_merged
         # merge existing user ids and add to main table
-        #columns_label = ['USN','UT','UNFL']
-        columns_label = ['UT','UNFL']
+        columns_label = ['USN','UT','UNFL']
         for j in existing:
             for jj in columns_label:
                 main_val = tb_UID_main[jj][j]

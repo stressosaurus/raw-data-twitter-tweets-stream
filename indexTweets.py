@@ -58,8 +58,8 @@ print()
 
 if set_type == 'hashtag':
     field = 'HTGS'
-#elif set_type == 'user-mention':
-#    field = 'UMS'
+elif set_type == 'user-mention':
+    field = 'UMS'
 else:
     field = 'HTGS' # default field
 
@@ -84,13 +84,13 @@ for k, i in enumerate(list_tweet):
     	#try:
     		FF = str(tb[field][idk]).lower().split(',')
     		HTGS = str(tb['HTGS'][idk]).lower().split(',')
-#    		UMS = str(tb['UMS'][idk]).lower().split(',')
+    		UMS = str(tb['UMS'][idk]).lower().split(',')
     		PTID = tb['PTID'][idk]
     		if common_elements(keywords,FF) == True:
     			if HTGS[0] != '*':
     				h.extend(HTGS)
-#    			if UMS[0] != '*':
-#    				um.extend(UMS)
+    			if UMS[0] != '*':
+    				um.extend(UMS)
     			if PTID != '*':
     				pi.append(PTID)
     		if c%mod == 0:
@@ -105,7 +105,7 @@ for k, i in enumerate(list_tweet):
 start_1 = time.time()
 print('Preparing related keywords...')
 h = np.unique(h)
-#um = np.unique(um)
+um = np.unique(um)
 pi = np.unique(pi)
 end_1 = time.time()
 print('Computing time: '+str(round(end_1-start_1,2))+' seconds.')
@@ -115,7 +115,7 @@ start_1 = time.time()
 print('Saving related keywords...')
 related_keywords = {}
 related_keywords['h'] = h
-#related_keywords['um'] = um
+related_keywords['um'] = um
 related_keywords['pi'] = pi
 np.save(directory_2+'keywords-'+set_type+'-'+set_list+'-related-keywords-'+rk+'.npy',related_keywords)
 del related_keywords
