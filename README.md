@@ -15,7 +15,7 @@ After successful streaming, the code will filter the tweets to reduce the memory
 
 **Data tabulation and subsetting.** The raw Twitter data collected during live streaming was processed in five steps. The first step is when the raw data is saved into a JSON file and processed through a filter and processing steps where the unecessary information (such as hyperlinks and empty strings) are filtered away. The last two steps are the conversion from JSON data structure to a tabular data structure for easy access of information.
 
-### 1. Stream, FIlter and Process Live Tweets.
+### 1. Stream, Filter and Process Live Tweets.
 
 Using the streamer scripts **streamTwitter.py**, **loop.streamTweets.sh**, and **run.loop.streamTweets.sh** requires two things.
 
@@ -36,6 +36,12 @@ sudo pip install -U nltk
 ```python
 import nltk
 nltk.download()
+```
+
+***Install Python modules.***
+
+```
+pip3 install --user -r requirements.txt
 ```
 
 #### 1.2 Setting Up the Twitter Application Programming Interface (API).
