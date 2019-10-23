@@ -23,7 +23,13 @@ Using the streamer scripts **streamTwitter.py**, **loop.streamTweets.sh**, and *
 
 2. Twitter Application Progamming Interface (API) keys.
 
-#### 1.1 Installing the Natural Language Tool Kit (NLTK) and NLTK Corpora.
+#### 1.1 Dependencies.
+
+***Clone repository.***
+
+```bash
+git clone https://github.com/stressosaurus/raw-data-twitter-tweets-stream.git
+```
 
 ***Install NLTK using Linux terminal.***
 
@@ -31,16 +37,15 @@ Using the streamer scripts **streamTwitter.py**, **loop.streamTweets.sh**, and *
 sudo pip install -U nltk
 ```
 
-***Install NLTK Corpora using Python.***
+***Install NLTK Corpora.***
 
-```python
-import nltk
-nltk.download()
+```bash
+python -m nltk.downloader all
 ```
 
 ***Install Python modules.***
 
-```
+```bash
 pip3 install --user -r requirements.txt
 ```
 
@@ -65,7 +70,7 @@ Before you can stream, you need to provide a list of keywords. The NLTK streamer
 
 For example you need to create a text file named ***keywords-stream[X].txt*** in the ***keywords-stream*** folder where **[X]** is the whatever you want to name your list. Then, list all the keywords inside the text file like shown below.
 
-```bash
+```
 normal
 abnormal
 supernormal
